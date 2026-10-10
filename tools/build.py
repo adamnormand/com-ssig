@@ -93,7 +93,10 @@ def page(path, title, body, *, desc='', site='gaspe', nav=None, current=None, mu
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{e(title)}</title>
 <meta name="description" content="{e(desc or title)}">
-<meta name="theme-color" content="#14213d">
+<meta name="theme-color" content="#a22d24">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Open+Sans:wght@400;600;700&display=swap">
 <link rel="icon" href="{r}favicon.ico" sizes="any">
 <link rel="icon" type="image/png" href="{r}favicon.png">
 <link rel="apple-touch-icon" href="{r}apple-touch-icon.png">
@@ -110,7 +113,7 @@ def page(path, title, body, *, desc='', site='gaspe', nav=None, current=None, mu
 {(body.replace('{root}', r).replace('{r}', g if site == 'gaspe' else r)).replace(g + 'assets/', r + 'assets/')}
 </main>
 <div class="urgence-bande">EN CAS D’URGENCE, COMPOSEZ LE <a href="tel:911">9-1-1</a></div>
-<footer class="pied"><div class="wrap">{foot}</div></footer>
+<footer class="pied"><div class="wrap">{foot.replace('<div class="bas">', '</div><div class="bas"><div class="wrap">', 1)}</div></footer>
 </body>
 </html>
 '''
@@ -214,7 +217,7 @@ def build_gaspe():
     # ---------------- Accueil ----------------
     body = f'''
 <div class="heros" style="background-image:url('{{r}}assets/img/banniere-accueil.jpg')"><div class="wrap">
-<p class="kicker" style="color:#ffb4ac">Ville de Gaspé</p>
+<p class="kicker">Ville de Gaspé</p>
 <h1>Service de sécurité incendie de Gaspé</h1>
 <p>Une centaine de pompiers, sauveteurs, plongeurs et membres d’équipes spécialisées, répartis dans sept casernes, au service de la population de L’Anse-à-Valleau à Fort-Prével.</p>
 <div class="btns"><a class="btn" href="{{r}}service/recrutement/">Devenir pompier</a><a class="btn alt" href="{{r}}service/">Nos casernes</a></div>
@@ -675,7 +678,7 @@ def build_munis():
         if m['heures']:
             contact += f'<dt>Heures</dt><dd>{m["heures"]}</dd>'
         body = f"""
-<div class="titre-page"><div class="wrap"><p class="kicker" style="color:#ffb4ac">{m["type"]}</p><h1>Sécurité incendie — {m["nom"]}</h1><p>Urgence, service incendie, prévention et brûlage pour les citoyens de {m["nom"]}.</p></div></div>
+<div class="titre-page"><div class="wrap"><p class="kicker">{m["type"]}</p><h1>Sécurité incendie — {m["nom"]}</h1><p>Urgence, service incendie, prévention et brûlage pour les citoyens de {m["nom"]}.</p></div></div>
 <section id="urgence"><div class="wrap deux">
 <div><h2>En cas d’urgence</h2><div class="alerte"><b>Incendie, accident, personne en danger : composez le 9-1-1.</b></div>
 <p>Le centre 9-1-1 répartit l’appel vers le service de sécurité incendie qui dessert {m["nom"]}. Donnez l’adresse exacte et restez en ligne jusqu’à ce que le répartiteur vous indique de raccrocher.</p></div>
@@ -719,7 +722,7 @@ def build_reseau():
         for k, n, p, d in RESEAU)
     body = f"""
 <div class="heros" style="background-image:url('{{r}}assets/img/banniere-accueil.jpg')"><div class="wrap">
-<p class="kicker" style="color:#ffb4ac">MRC de La Côte-de-Gaspé</p>
+<p class="kicker">MRC de La Côte-de-Gaspé</p>
 <h1>Réseau incendie de La Côte-de-Gaspé</h1>
 <p>Gaspé, Cloridorme, Grande-Vallée et Murdochville : trouvez l’information de sécurité incendie de votre municipalité.</p>
 <div class="btns"><a class="btn" href="tel:911">Urgence : 9-1-1</a><a class="btn alt" href="#municipalites">Choisir ma municipalité</a></div>
