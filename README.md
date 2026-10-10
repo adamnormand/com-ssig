@@ -1,60 +1,56 @@
 # com-ssig — Réseau incendie de La Côte-de-Gaspé
 
-Static site (French only) replacing the WordPress site at **incendiegaspe.com**, plus basic pages for **Cloridorme**, **Grande-Vallée** and **Murdochville**. Plain HTML + one shared stylesheet. No build step required to publish. Migrated 2026-10-10.
+Static site (French only) at **incendiecotedegaspe.com**: a network landing page, the Gaspé section replacing the WordPress site at incendiegaspe.com, and basic pages for **Cloridorme**, **Grande-Vallée** and **Murdochville**. Plain HTML + one shared stylesheet. No build step required to publish. Migrated 2026-10-10.
 
 ## What's in the repo
 
+Primary domain: **incendiecotedegaspe.com** (`CNAME`). The four municipal domains forward to their section.
+
 | Path | Content |
 |---|---|
-| `index.html` | Gaspé home (SSI Gaspé) |
-| `service/` | Service incendie: overview, direction, dispatch protocol |
-| `service/caserne-45/` … `caserne-52/` | 7 fire-station pages (coordinates, team, units, zone) |
-| `service/recrutement/` | Recruitment (online form replaced by mailto) |
-| `association/` | Association des pompiers volontaires (social side): history, activities, awards, Amis des pompiers, In memoriam, board |
-| `regroupement/` | Regroupement des pompiers volontaires du Grand Gaspé (union side): documents, governance, contact; links to the HubSpot member portal |
-| `outils/` | Boîte à outils: burning permits + full Règlement 627-96, SOPFEU/Ville restrictions, forest-fire risk, flood stations (York 020404, Dartmouth 020602) |
-| `prevention/` | Prevention now handled by the MRC de La Côte-de-Gaspé (Guillaume Pelchat) + 2020-04-16 prevention tips article |
-| `coordonnees/` | All contacts (SSI, MRC prevention, casernes, organizations) |
-| `cloridorme/`, `grande-vallee/`, `murdochville/` | Basic municipal pages: 911, prevention (MRC), burning/SOPFEU |
-| `caserne45/`, `interactif/…`, `ssi/recrutement/`, `contact/`, `legal/`, etc. | Redirect stubs from old WordPress URLs |
-| `wp-content/uploads/*.pdf` | The 5 PDFs kept at their **original URLs** (the HubSpot portal and past emails link there) |
-| `assets/style.css`, `assets/img/` | Stylesheet and 37 images (photos recompressed, max 1600 px) |
-| `404.html`, `CNAME`, `.nojekyll`, `robots.txt`, `sitemap.xml`, favicons | Pages plumbing |
+| `index.html` | Network landing page: links to the 4 municipalities, MRC prevention contact, 9-1-1, SOPFEU |
+| `gaspe/` | Gaspé home (SSI Gaspé) |
+| `gaspe/service/`, `gaspe/service/caserne-45/` … `caserne-52/`, `gaspe/service/recrutement/` | Service incendie, 7 casernes, recruitment |
+| `gaspe/association/` | Association des pompiers volontaires (social side) |
+| `gaspe/regroupement/` | Regroupement des pompiers volontaires du Grand Gaspé (union side) |
+| `gaspe/outils/` | Burning permits + Règlement 627-96, restrictions, forest-fire and flood risk |
+| `gaspe/prevention/` | Prevention (MRC) + prevention tips article |
+| `gaspe/coordonnees/` | All contacts |
+| `cloridorme/`, `grande-vallee/`, `murdochville/` | Basic municipal pages |
+| `gaspe/caserne45/`, `gaspe/interactif/…`, `gaspe/ssi/recrutement/`, etc. | Redirect stubs for old WordPress URLs (reached via path-preserving forwarding of incendiegaspe.com) |
+| `gaspe/wp-content/uploads/*.pdf` | The 5 PDFs, at their old path relative to the Gaspé section |
+| `assets/`, `404.html`, `robots.txt`, `sitemap.xml`, favicons, `.nojekyll` | Shared plumbing |
 | `tools/build.py` | Generator for all HTML pages. Edit content here, run `python3 tools/build.py`, commit. |
 
-The **network bar** at the top of every page (modelled on the "Réseau" bar at ceegim.com) switches between Gaspé, Cloridorme, Grande-Vallée and Murdochville. Links are relative paths, so they work on the github.io preview, on incendiegaspe.com, and through the three forwarded domains.
+The **network bar** on every page switches between the four municipalities; "Réseau incendie" returns to the landing page. All links are relative.
 
 ## Publish on GitHub Pages
 
-1. Push these files to the root of `main` in the `com-ssig` repo.
-2. Repo **Settings → Pages**: Source = *Deploy from a branch*, Branch = `main`, folder `/ (root)`.
-3. Custom domain: `incendiegaspe.com` (already in `CNAME`). Wait for the DNS check, then tick **Enforce HTTPS**.
+1. Repo **Settings → Pages**: Source = *Deploy from a branch*, Branch = `main`, folder `/ (root)`.
+2. Custom domain: `incendiecotedegaspe.com` (already in `CNAME`). Wait for the DNS check, then tick **Enforce HTTPS**.
 
 ## DNS (Squarespace) — Pages first, DNS second
 
-**incendiegaspe.com** (change only these records):
+**incendiecotedegaspe.com** (change only these records):
 
 | Type | Host | Value |
 |---|---|---|
-| A | @ | 185.199.108.153 |
-| A | @ | 185.199.109.153 |
-| A | @ | 185.199.110.153 |
-| A | @ | 185.199.111.153 |
-| AAAA | @ | 2606:50c0:8000::153 |
-| AAAA | @ | 2606:50c0:8001::153 |
-| AAAA | @ | 2606:50c0:8002::153 |
-| AAAA | @ | 2606:50c0:8003::153 |
-| CNAME | www | `<github-user>.github.io` |
+| A | @ | 185.199.108.153 · 185.199.109.153 · 185.199.110.153 · 185.199.111.153 (four records) |
+| AAAA | @ | 2606:50c0:8000::153 · 8001::153 · 8002::153 · 8003::153 (four records) |
+| CNAME | www | `adamnormand.github.io` |
 
-Do **not** touch MX, TXT (SPF/DKIM/DMARC/verification), SRV, or the **`regroupement`** CNAME (HubSpot member portal stays live).
+**Forwarding (301) for the four municipal domains** — after incendiecotedegaspe.com is live with HTTPS:
 
-**The other three domains.** GitHub Pages allows one custom domain per repo. Recommended: use Squarespace **domain forwarding (301, with path)**:
+| Domain (+ www) | Forward to | Path |
+|---|---|---|
+| incendiegaspe.com | `https://incendiecotedegaspe.com/gaspe/` | **Keep path** if Squarespace offers it, so old links (`/caserne45/`, `/wp-content/uploads/…pdf` used by the HubSpot portal and past emails) resolve |
+| incendiecloridorme.com | `https://incendiecotedegaspe.com/cloridorme/` | Do not keep path |
+| incendiegrandevallee.com | `https://incendiecotedegaspe.com/grande-vallee/` | Do not keep path |
+| incendiemurdochville.com | `https://incendiecotedegaspe.com/murdochville/` | Do not keep path |
 
-- incendiecloridorme.com → `https://incendiegaspe.com/cloridorme/`
-- incendiegrandevallee.com → `https://incendiegaspe.com/grande-vallee/`
-- incendiemurdochville.com → `https://incendiegaspe.com/murdochville/`
+**incendiegaspe.com keeps its email and portal:** do not touch its MX/TXT (SPF, DKIM, DMARC) records — all `@incendiegaspe.com` addresses on the site stay valid — nor the `regroupement` CNAME (HubSpot member portal). Forwarding should only replace the web (@ and www) records. Test `https://` on every forwarded domain afterwards.
 
-Alternative if each must show its own domain in the address bar: three tiny repos, each with its own `CNAME`, holding a copy of that municipality page.
+If Squarespace cannot keep the path for incendiegaspe.com, update the five PDF links in the HubSpot portal to `https://incendiecotedegaspe.com/gaspe/wp-content/uploads/…`.
 
 ## Corrections made vs. the WordPress site
 

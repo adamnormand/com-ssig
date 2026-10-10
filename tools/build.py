@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-"""Génère le site statique com-ssig (incendiegaspe.com + pages municipales).
+"""Génère le site statique com-ssig (incendiecotedegaspe.com : accueil du réseau, Gaspé et pages municipales).
 Usage : python3 tools/build.py   (régénère les pages HTML à la racine du dépôt)"""
 import os, html
 
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 MAJ = '2026-10-10'
+DOMAINE = 'incendiecotedegaspe.com'
 
 # ---- Réglages à compléter (voir README, section « À confirmer ») ----
 MRC_PREV = {
@@ -27,10 +28,13 @@ SSI = {
 }
 SOCIAL = [('Facebook', 'https://www.facebook.com/ssigaspe'), ('Instagram', 'https://www.instagram.com/ssigaspe/')]
 
-RESEAU = [('gaspe', 'Gaspé', '', 'incendiegaspe.com'),
+RESEAU = [('gaspe', 'Gaspé', 'gaspe/', 'incendiegaspe.com'),
           ('cloridorme', 'Cloridorme', 'cloridorme/', 'incendiecloridorme.com'),
           ('grande-vallee', 'Grande-Vallée', 'grande-vallee/', 'incendiegrandevallee.com'),
           ('murdochville', 'Murdochville', 'murdochville/', 'incendiemurdochville.com')]
+
+NAV_RESEAU = [('accueil', 'Accueil', ''), ('gaspe', 'Gaspé', 'gaspe/'), ('cloridorme', 'Cloridorme', 'cloridorme/'),
+              ('grande-vallee', 'Grande-Vallée', 'grande-vallee/'), ('murdochville', 'Murdochville', 'murdochville/'), ('prevention', 'Prévention', '#prevention')]
 
 NAV_GASPE = [('accueil', 'Accueil', ''), ('service', 'Service incendie', 'service/'),
              ('association', 'L’Association', 'association/'), ('regroupement', 'Regroupement', 'regroupement/'),
@@ -41,33 +45,47 @@ e = html.escape
 
 
 def page(path, title, body, *, desc='', site='gaspe', nav=None, current=None, municipalite=None, root=None):
+    if site == 'gaspe' and not path.endswith('.html'):
+        path = 'gaspe/' + path
     depth = path.count('/')
-    r = root if root is not None else '../' * depth
+    r = root if root is not None else '../' * depth   # racine du site
+    g = r + 'gaspe/'                                   # base du sous-site Gaspé
     reseau = ''.join(
         f'<li><a href="{r}{p}" title="{dom}"{" aria-current=\"page\"" if k == site else ""}>{n}</a></li>'
         for k, n, p, dom in RESEAU)
     if site == 'gaspe':
-        brand = (f'<a class="marque" href="{r}"><img src="{r}assets/img/ssig-logo.png" alt="Service de sécurité incendie — Ville de Gaspé" width="800" height="326"></a>')
+        brand = (f'<a class="marque" href="{g}"><img src="{r}assets/img/ssig-logo.png" alt="Service de sécurité incendie — Ville de Gaspé" width="800" height="326"></a>')
         items = nav or NAV_GASPE
+    elif site == 'reseau':
+        brand = (f'<a class="marque" href="{r}"><span class="txt"><small>Réseau incendie</small>La Côte-de-Gaspé</span></a>')
+        items = nav
     else:
         brand = (f'<a class="marque" href="{r}{site}/"><span class="txt"><small>Sécurité incendie</small>{e(municipalite)}</span></a>')
         items = nav
+    base = g if site == 'gaspe' else r
     navhtml = ''.join(
-        f'<li><a href="{r}{p}"{" aria-current=\"page\"" if k == current else ""}>{n}</a></li>' for k, n, p in items)
+        f'<li><a href="{base}{p}"{" aria-current=\"page\"" if k == current else ""}>{n}</a></li>' for k, n, p in items)
     if site == 'gaspe':
         foot = f'''<div class="cols">
 <div><h4>Service de sécurité incendie de Gaspé</h4><p>{SSI['adresse']}<br><a href="tel:{SSI['tel1_href']}">{SSI['tel1']}</a> · <a href="mailto:{SSI['courriel']}">{SSI['courriel']}</a><br>{SSI['heures']}</p></div>
-<div><h4>Liens</h4><ul class="sans"><li><a href="{r}service/">Service incendie</a></li><li><a href="{r}association/">Association des pompiers volontaires</a></li><li><a href="{r}regroupement/">Regroupement des pompiers volontaires</a></li><li><a href="{r}prevention/">Prévention (MRC)</a></li></ul></div>
+<div><h4>Liens</h4><ul class="sans"><li><a href="{g}service/">Service incendie</a></li><li><a href="{g}association/">Association des pompiers volontaires</a></li><li><a href="{g}regroupement/">Regroupement des pompiers volontaires</a></li><li><a href="{g}prevention/">Prévention (MRC)</a></li><li><a href="{r}">Réseau incendie de La Côte-de-Gaspé</a></li></ul></div>
 <div><h4>Suivez-nous</h4><ul class="sans">{''.join(f'<li><a href="{u}" rel="noopener">{n}</a></li>' for n, u in SOCIAL)}</ul></div>
 </div>
 <div class="bas">© 2026 Centre de services partagés aux organisations des premiers répondants de Gaspé · Nous soutenons le Service de sécurité incendie de Gaspé, l’Association des pompiers volontaires de Gaspé et le Regroupement des pompiers volontaires du Grand Gaspé. · Mise à jour : {MAJ}</div>'''
+    elif site == 'reseau':
+        foot = f'''<div class="cols">
+<div><h4>Réseau incendie de La Côte-de-Gaspé</h4><p>En cas d’urgence, composez le <b>9-1-1</b>.</p></div>
+<div><h4>Prévention</h4><p>{MRC_PREV['org']}<br><a href="{r}#prevention">Responsable : {MRC_PREV['nom']}</a></p></div>
+<div><h4>Municipalités</h4><ul class="sans">{''.join(f'<li><a href="{r}{p}">{n}</a></li>' for k, n, p, d in RESEAU)}</ul></div>
+</div>
+<div class="bas">{DOMAINE} · Mise à jour : {MAJ}</div>'''
     else:
         foot = f'''<div class="cols">
 <div><h4>Sécurité incendie — {e(municipalite)}</h4><p>En cas d’urgence, composez le <b>9-1-1</b>.</p></div>
 <div><h4>Prévention</h4><p>{MRC_PREV['org']}<br><a href="{r}{site}/#prevention">Responsable : {MRC_PREV['nom']}</a></p></div>
 <div><h4>Réseau</h4><ul class="sans">{''.join(f'<li><a href="{r}{p}">{n}</a></li>' for k, n, p, d in RESEAU if k != site)}</ul></div>
 </div>
-<div class="bas">Réseau incendie de La Côte-de-Gaspé · Mise à jour : {MAJ}</div>'''
+<div class="bas"><a href="{r}">Réseau incendie de La Côte-de-Gaspé</a> · Mise à jour : {MAJ}</div>'''
     doc = f'''<!doctype html>
 <html lang="fr-CA">
 <head>
@@ -83,13 +101,13 @@ def page(path, title, body, *, desc='', site='gaspe', nav=None, current=None, mu
 </head>
 <body>
 <a class="sr" href="#contenu">Aller au contenu</a>
-<div class="reseau"><div class="wrap"><span class="lbl">Réseau incendie</span><ul>{reseau}</ul><span class="urg">Urgence : <b>9-1-1</b></span></div></div>
+<div class="reseau"><div class="wrap"><a class="lbl" href="{r}"{' aria-current="page"' if site == 'reseau' else ''}>Réseau incendie</a><ul>{reseau}</ul><span class="urg">Urgence : <b>9-1-1</b></span></div></div>
 <header class="entete"><div class="wrap">{brand}
 <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav" onclick="var n=document.getElementById('nav');var o=n.classList.toggle('ouvert');this.setAttribute('aria-expanded',o)">Menu</button>
 <nav class="princ" id="nav" aria-label="Menu principal"><ul>{navhtml}</ul></nav>
 </div></header>
 <main id="contenu">
-{body.replace('{r}', r)}
+{(body.replace('{root}', r).replace('{r}', g if site == 'gaspe' else r)).replace(g + 'assets/', r + 'assets/')}
 </main>
 <div class="urgence-bande">EN CAS D’URGENCE, COMPOSEZ LE <a href="tel:911">9-1-1</a></div>
 <footer class="pied"><div class="wrap">{foot}</div></footer>
@@ -561,8 +579,8 @@ def build_gaspe():
 
     # ---------------- 404 ----------------
     body = titre('Page introuvable', 'La page demandée n’existe pas ou a été déplacée.') + '''
-<section><div class="wrap"><p>Le site a été renouvelé. Voici les principales sections :</p><ul class="liste"><li><a href="/">Accueil — SSI Gaspé</a></li><li><a href="/service/">Service incendie et casernes</a></li><li><a href="/outils/">Boîte à outils (permis de brûlage)</a></li><li><a href="/association/">L’Association</a></li><li><a href="/regroupement/">Le Regroupement</a></li><li><a href="/cloridorme/">Cloridorme</a> · <a href="/grande-vallee/">Grande-Vallée</a> · <a href="/murdochville/">Murdochville</a></li></ul></div></section>'''
-    page('404.html', 'Page introuvable — Réseau incendie', body, root='/')
+<section><div class="wrap"><p>Le site a été renouvelé. Voici les principales sections :</p><ul class="liste"><li><a href="/">Réseau incendie de La Côte-de-Gaspé</a></li><li><a href="/gaspe/">Gaspé — SSI Gaspé</a></li><li><a href="/gaspe/service/">Service incendie et casernes</a></li><li><a href="/gaspe/outils/">Boîte à outils (permis de brûlage)</a></li><li><a href="/gaspe/association/">L’Association</a></li><li><a href="/gaspe/regroupement/">Le Regroupement</a></li><li><a href="/cloridorme/">Cloridorme</a> · <a href="/grande-vallee/">Grande-Vallée</a> · <a href="/murdochville/">Murdochville</a></li></ul></div></section>'''
+    page('404.html', 'Page introuvable — Réseau incendie', body, site='reseau', nav=NAV_RESEAU, root='/')
 
 
 MUNIS = [
@@ -587,7 +605,7 @@ def build_munis():
 <section class="gris" id="prevention"><div class="wrap deux">
 <div><h2>Prévention</h2><p class="intro">La prévention des incendies relève désormais de la MRC de La Côte-de-Gaspé pour l’ensemble des municipalités de son territoire, dont {m["nom"]}.</p>
 <p>Visites de prévention, inspections, avertisseurs de fumée, ramonage, questions de réglementation : adressez-vous au responsable de la prévention de la MRC.</p>
-<p><a href="{{r}}prevention/#conseils">Conseils pratiques pour la prévention des incendies →</a></p></div>
+<p><a href="{{r}}gaspe/prevention/#conseils">Conseils pratiques pour la prévention des incendies →</a></p></div>
 {mrc_bloc()}
 </div></section>
 <section id="brulage"><div class="wrap">
@@ -602,18 +620,54 @@ def build_munis():
              desc=f'Sécurité incendie à {m["nom"]} : urgence 9-1-1, prévention (MRC de La Côte-de-Gaspé) et brûlage.')
 
 
+def build_reseau():
+    desc_m = {
+        'gaspe': ('Ville de Gaspé', 'Service de sécurité incendie de Gaspé : sept casernes, recrutement, permis de brûlage, Association et Regroupement des pompiers volontaires.'),
+        'cloridorme': ('Municipalité de Cloridorme', 'Urgence, prévention et brûlage pour les citoyens de Cloridorme.'),
+        'grande-vallee': ('Municipalité de Grande-Vallée', 'Urgence, prévention et brûlage pour les citoyens de Grande-Vallée.'),
+        'murdochville': ('Ville de Murdochville', 'Urgence, prévention et brûlage pour les citoyens de Murdochville.'),
+    }
+    cartes = ''.join(
+        f'<a class="carte" href="{{r}}{p}"><p class="kicker">{desc_m[k][0]}</p><h3>{n}</h3><p>{desc_m[k][1]}</p><span class="lien">{d} →</span></a>'
+        for k, n, p, d in RESEAU)
+    body = f"""
+<div class="heros" style="background-image:url('{{r}}assets/img/banniere-accueil.jpg')"><div class="wrap">
+<p class="kicker" style="color:#ffb4ac">MRC de La Côte-de-Gaspé</p>
+<h1>Réseau incendie de La Côte-de-Gaspé</h1>
+<p>Gaspé, Cloridorme, Grande-Vallée et Murdochville : trouvez l’information de sécurité incendie de votre municipalité.</p>
+<div class="btns"><a class="btn" href="tel:911">Urgence : 9-1-1</a><a class="btn alt" href="#municipalites">Choisir ma municipalité</a></div>
+</div></div>
+<section id="municipalites"><div class="wrap">
+<h2>Choisissez votre municipalité</h2>
+<div class="grille">{cartes}</div>
+</div></section>
+<section class="gris" id="prevention"><div class="wrap deux">
+<div><h2>Prévention des incendies</h2><p class="intro">La prévention des incendies est assurée par la MRC de La Côte-de-Gaspé pour l’ensemble des municipalités du réseau.</p>
+<p>Visites de prévention, inspections, avertisseurs de fumée, ramonage et questions de réglementation : communiquez avec le coordonnateur en sécurité incendie de la MRC.</p>
+<p><a href="{{r}}gaspe/prevention/#conseils">Conseils pratiques pour la prévention des incendies →</a></p></div>
+{mrc_bloc()}
+</div></section>
+<section><div class="wrap grille">
+<div class="carte"><p class="kicker">Feux à ciel ouvert</p><h3>Avant de brûler</h3><p>Vérifiez les restrictions de la SOPFEU et la réglementation de votre municipalité. Les restrictions provinciales ont préséance sur tout permis municipal.</p><div class="btns"><a class="btn" href="https://sopfeu.qc.ca/restrictions/" rel="noopener">Restrictions SOPFEU</a></div></div>
+<div class="carte"><p class="kicker">Urgence</p><h3>Composez le 9-1-1</h3><p>Incendie, accident, personne en danger : le centre 9-1-1 répartit l’appel vers le service de sécurité incendie qui dessert votre secteur.</p></div>
+</div></section>"""
+    page('', 'Réseau incendie de La Côte-de-Gaspé', body, site='reseau', nav=NAV_RESEAU, current='accueil',
+         desc='Sécurité incendie à Gaspé, Cloridorme, Grande-Vallée et Murdochville : urgence 9-1-1, prévention (MRC de La Côte-de-Gaspé) et liens vers chaque municipalité.')
+
+
 if __name__ == '__main__':
     build_gaspe()
     build_munis()
-    open(os.path.join(OUT, 'CNAME'), 'w').write('incendiegaspe.com\n')
+    build_reseau()
+    open(os.path.join(OUT, 'CNAME'), 'w').write(DOMAINE + '\n')
     open(os.path.join(OUT, '.nojekyll'), 'w').write('')
-    open(os.path.join(OUT, 'robots.txt'), 'w').write('User-agent: *\nAllow: /\nSitemap: https://incendiegaspe.com/sitemap.xml\n')
+    open(os.path.join(OUT, 'robots.txt'), 'w').write('User-agent: *\nAllow: /\nSitemap: https://' + DOMAINE + '/sitemap.xml\n')
     urls = []
     for root, _, files in os.walk(OUT):
         for f in files:
-            if f == 'index.html':
+            if f == 'index.html' and 'http-equiv="refresh"' not in open(os.path.join(root, f), encoding='utf-8').read() and '.git' not in root:
                 rel = os.path.relpath(root, OUT).replace('\\', '/')
-                urls.append('https://incendiegaspe.com/' + ('' if rel == '.' else rel + '/'))
+                urls.append(f'https://{DOMAINE}/' + ('' if rel == '.' else rel + '/'))
     sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + ''.join(f'<url><loc>{u}</loc><lastmod>{MAJ}</lastmod></url>\n' for u in sorted(urls)) + '</urlset>\n'
     open(os.path.join(OUT, 'sitemap.xml'), 'w').write(sm)
     print(len(urls), 'pages')
@@ -634,10 +688,10 @@ def build_redirects():
     for old, new in REDIRECTS.items():
         r = '../' * (old.count('/') + 1)
         tgt = r + new
-        d = os.path.join(OUT, old); os.makedirs(d, exist_ok=True)
+        d = os.path.join(OUT, 'gaspe', old); os.makedirs(d, exist_ok=True)
         open(os.path.join(d, 'index.html'), 'w', encoding='utf-8').write(
             f'<!doctype html><html lang="fr-CA"><head><meta charset="utf-8"><title>Page déplacée</title>'
-            f'<meta http-equiv="refresh" content="0; url={tgt}"><link rel="canonical" href="https://incendiegaspe.com/{new}"><meta name="robots" content="noindex"></head>'
+            f'<meta http-equiv="refresh" content="0; url={tgt}"><link rel="canonical" href="https://{DOMAINE}/gaspe/{new}"><meta name="robots" content="noindex"></head>'
             f'<body><p>Cette page a été déplacée : <a href="{tgt}">continuer</a>.</p></body></html>\n')
 
 

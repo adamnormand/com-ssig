@@ -16,7 +16,9 @@ a:hover{color:var(--rouge-f)}
 /* Barre réseau (inspirée de la barre « Réseau » de ceegim.com) */
 .reseau{background:#0b1426;color:#cfd5e2;font-size:13px}
 .reseau .wrap{display:flex;align-items:center;gap:6px 18px;flex-wrap:wrap;min-height:38px;padding-top:4px;padding-bottom:4px}
-.reseau .lbl{font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#fff;display:flex;align-items:center;gap:8px}
+.reseau .lbl{font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#fff;display:flex;align-items:center;gap:8px;text-decoration:none;padding:3px 0}
+.reseau a.lbl:hover{background:none;color:#ffb4ac}
+.reseau a.lbl[aria-current]{background:none;color:#ffb4ac}
 .reseau .lbl::before{content:"";width:14px;height:10px;background:linear-gradient(#fff 0 2px,transparent 2px 4px,#fff 4px 6px,transparent 6px 8px,#fff 8px 10px)}
 .reseau ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:4px 4px}
 .reseau a{color:#cfd5e2;text-decoration:none;padding:3px 10px;border-radius:999px;display:inline-block}
@@ -125,7 +127,8 @@ footer.pied .bas{border-top:1px solid #23304d;margin-top:24px;padding-top:16px;f
 }
 @media (max-width:600px){
   body{font-size:15.5px}
-  .reseau .urg,.reseau .lbl{display:none}
+  .reseau .urg{display:none}
+  .reseau .lbl{font-size:12px}
   .reseau a{padding:3px 8px}
   .reseau ul{gap:2px}
   .marque img{height:42px}

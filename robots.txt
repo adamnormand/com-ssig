@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://incendiegaspe.com/sitemap.xml
+Sitemap: https://incendiecotedegaspe.com/sitemap.xml
