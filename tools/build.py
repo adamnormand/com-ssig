@@ -400,7 +400,7 @@ def build_gaspe():
 <div><h2>La prévention relève de la MRC</h2><p class="intro">La prévention des incendies est désormais assurée par la MRC de La Côte-de-Gaspé pour l’ensemble des municipalités du territoire, dont Gaspé, Cloridorme, Grande-Vallée et Murdochville.</p>
 <p>Pour une visite de prévention, une inspection ou une question sur la réglementation en prévention, communiquez avec le responsable de la prévention à la MRC. Le Service de sécurité incendie de Gaspé demeure responsable des interventions d’urgence.</p></div>
 {mrc_bloc()}
-</div></section>
+</div><div class="wrap" style="margin-top:20px">{operation_prevention()}<h3 style="margin-top:28px">Conseils essentiels de la MRC</h3>{CONSEILS_MRC}</div></section>
 <section class="gris" id="conseils"><div class="wrap">
 <p class="kicker">Publié le 2020-04-16</p><h2>Conseils pratiques pour la prévention des incendies</h2>
 <h3>En bref</h3>
@@ -497,67 +497,74 @@ def build_gaspe():
     page('association/', 'L’Association des pompiers volontaires de Gaspé', body, desc='Association des pompiers volontaires de Gaspé : mandat, historique, activités, mérites et hommages.', current='association')
 
     # ---------------- Regroupement ----------------
-    hub = 'https://regroupement.incendiegaspe.com/hubfs/'
-    docs_rpgg = [
-        ('Règlement n<sup>o</sup> 1 du Regroupement', hub + 'R%C3%A9glement%20No.%201.docx.pdf', ''),
-        ('Règlement n<sup>o</sup> 2 du Regroupement', '', 'Document à venir'),
-        ('Entente de travail 2023-01-01 au 2029-12-31 (en vigueur depuis le 2025-12-15, avec rétroactivité)', '', 'Document à venir'),
-        ('Salaires des pompiers 2025, incluant la rétroactivité', '', 'Document à venir'),
-        ('2026-01-25 — Assurance vie : augmentation de la prestation', hub + '2026%20-%20Assurance.pdf', ''),
-        ('Politique de confidentialité et de protection des renseignements personnels', hub + 'RPGG%20-%20Politique%20de%20confidentialit%C3%A9%20et%20de%20protection%20des%20renseignements%20personnels%20(signe).pdf', ''),
-        ('2024-11-06 — Procès-verbal de l’assemblée générale annuelle', hub + 'RPGG%20-%20AGA%202024%20-%202024-11-06%20-%20Proc%C3%A8s%20verbal.pdf', ''),
-        ('2024-11-06 — Procès-verbal de l’assemblée extraordinaire des membres', hub + 'RPGG%20-%20AGE%202024%20-%202024-11-06%20-%20Proc%C3%A8s%20verbal.pdf', ''),
-        ('2024-11-17 — Procès-verbal du conseil d’administration (CMEX-24A)', hub + '2024-11-17%20-%20CMEX%20-%20Proc%C3%A8s%20verbal%20du%20CMEX-A%20(2).pdf', ''),
-        ('2024-11-19 — Procès-verbal du conseil élargi (CMEL-24B)', hub + '2024-11-19%20-%20CMEL-24B%20-%20Proc%C3%A8s%20verbal%20de%20lAssembl%C3%A9%20CMEL-24B.pdf', ''),
-        ('2024-11-24 — Procès-verbal du conseil élargi (CMEL-24C)', hub + '2024-11-24%20-%20CMEL-24C%20-%20Proc%C3%A8s%20verbal%20de%20lAssembl%C3%A9%20CMEL-24C.pdf', ''),
-    ]
-    docs_emp = [
-        ('Entente de travail 2016-01-01 au 2022-12-31 (remplacée par l’entente 2023-2029)', '{r}wp-content/uploads/Entente-de-travail-pompiers-2016-2022-version-finale-signee.pdf', 'PDF · 4,8 Mo'),
-        ('2024-09-27 — Modification mineure à l’entente 2016 : ajout de la Journée nationale de la vérité et de la réconciliation', hub + 'rpgg_jv.pdf', ''),
-        ('Salaires des pompiers 2024, incluant la rétroactivité (indexation de la convention générale de la Ville)', '{r}wp-content/uploads/Salaires-pompiers-annee-2024.pdf', 'PDF · 67 ko'),
-        ('SSQ Groupe financier — Brochure du régime d’assurance collective des pompiers de la Ville de Gaspé (2018-04-01)', '{r}wp-content/uploads/Brochure-SSQ-pompiers-volontaires-2018-04-01.pdf', 'PDF · 819 ko'),
-        ('SSQ Groupe financier — Résumé de l’assurance collective (2018-04-01)', '{r}wp-content/uploads/Resume-SSQ-pompiers-volontaires-2018-04-01.pdf', 'PDF · 739 ko'),
-        ('AXA — Assurance vie 100 000 $', hub + 'rpgg_axa.pdf', ''),
-        ('Organigramme du SSI Gaspé — août 2024', '{r}wp-content/uploads/Organigramme-Service-incendie-aout-2024.pdf', 'PDF · 392 ko'),
-        ('Description de fonction — Pompier à temps partiel', hub + 'rpgg_jd_pompier.pdf', ''),
-        ('Description de fonction — Lieutenant à temps partiel', hub + 'rpgg_jd_officier.pdf', ''),
-        ('Programme de prévention — Service de protection contre les incendies (2024-10-30)', hub + 'Programme%20de%20pr%C3%A9vention%20Service%20protection%20contre%20les%20incendies%2030%20oct%202024%20.pdf', ''),
-        ('Guide d’entretien de l’habit de combat (RH de la Ville, 2024-10-30)', hub + 'Annexe%20C%20Guide%20entretien%20habit%20de%20combats%20oct%202024.pdf', ''),
-        ('Formulaire d’accusé de réception et d’engagement (RH de la Ville, 2024-10-30)', hub + 'Engagement%20du%20travailleur%20%C3%A0%20signer.pdf', ''),
-        ('PON-001 — Sorties des unités (2015-06-01)', hub + 'PON-001%20-%20Sorties%20des%20unit%C3%A9s%20(V2015-06-01).pdf', ''),
-        ('PON-002 — Personnel à bord des unités (2015-06-01)', hub + 'PON-002%20-%20Personnel%20%C3%A0%20bord%20des%20unit%C3%A9s%20(V2015-06-01).pdf', ''),
-        ('PON-003 — Véhicule d’état-major (2015-06-01)', hub + 'PON-003%20-%20V%C3%A9hicule%20d%C3%A9tat%20major%20(V2015-06-01).pdf', ''),
-        ('PON-004 — Prise des présences (2015-06-01)', hub + 'PON-004%20-%20Prise%20de%20pr%C3%A9snces%20(V2015-06-01).pdf', ''),
-        ('PON-005 — Programme d’entraînement des pompiers (2018-01-01)', hub + 'PON-005%20-%20Programme%20d%E2%80%99entra%C3%AEnement%20des%20pompiers%20(V2018-01-01).pdf', ''),
-        ('PON-006 — Dénombrement des pompiers (2020-11-01)', hub + 'PON-006%20-%20D%C3%A9nombrement%20des%20pompiers%20(V2020-11-01).pdf', ''),
-    ]
-    dl = lambda L: '<ul class="sans docs">' + ''.join((f'<li><a href="{u}">{t}</a> <span class="meta">{m}</span></li>' if u else f'<li>{t} <span class="meta">— {m}</span></li>') for t, u, m in L) + '</ul>'
-    body = titre('Regroupement des pompiers volontaires du Grand Gaspé', 'Volet syndical · Restez informés, restez unis', [('Accueil', '')]) + f'''
+    import json
+    R = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'rpgg_data.json'), encoding='utf-8'))
+    pol = next(d['url'] for d in R['documents'] if d['titre'].startswith('Politique de confidentialit'))
+
+    def lien(t, u, date=''):
+        d = f'<span class="meta">{date}</span> — ' if date else ''
+        return f'<li>{d}<a href="{u}" rel="noopener">{e(t)}</a></li>' if u else f'<li>{d}{e(t)}</li>'
+
+    def liste(L, dated=False):
+        return '<ul class="sans docs">' + ''.join(lien(x['titre'], x['url'], x.get('date', '') if dated else '') for x in L) + '</ul>'
+
+    gouv = f"""<div class="carte"><h3>Conseil d’administration</h3><ul class="sans"><li><b>Président :</b> Adam Normand</li><li><b>Secrétaire (intérim) :</b> Louis-Philippe Laurin</li><li><b>Trésorier :</b> Bruno Lévesque</li></ul><p class="note" style="margin-top:10px">En fonction depuis le 2024-11-07. Julie Samson, secrétaire, a démissionné le 2024-11-18; intérim assuré depuis le 2024-11-20.</p></div>
+<div class="carte"><h3>Conseil élargi</h3><ul class="sans"><li>Membres du conseil d’administration</li><li><b>Délégués nord :</b> Jonathan Leblanc, Julien Tissier (un poste vacant depuis le 2024-12-04)</li><li><b>Délégués sud :</b> Marco Dubé, Mitchell Legresley</li></ul></div>
+<div class="carte"><h3>Protection des renseignements personnels</h3><p>Personne responsable (Loi 25), depuis le 2024-11-05 : <b>Adam Normand</b>.</p><p><a href="{pol}" rel="noopener">Politique de confidentialité</a></p></div>"""
+    contact = """<dl class="coord"><dt>Adresse</dt><dd>148, boul. de Gaspé, Gaspé (Québec) G4X 1A9</dd><dt>Courriel</dt><dd><a href="mailto:regroupement@incendiegaspe.com">regroupement@incendiegaspe.com</a></dd><dt>Téléphone</dt><dd><a href="tel:+15142223064">+1 514 222-3064</a></dd></dl>"""
+
+    # Aperçu
+    body = titre('Regroupement des pompiers volontaires du Grand Gaspé', 'Volet syndical · Restez informés, restez unis', [('Accueil', '')]) + f"""
 <section><div class="wrap deux">
 <div><p class="intro">Le Regroupement représente l’ensemble des pompiers à temps partiel de la Ville de Gaspé et négocie avec la Ville l’entente de travail qui encadre leurs conditions.</p>
-<p>Les nouvelles, avis de convocation et le calendrier des assemblées sont publiés sur le portail des membres.</p>
-<div class="btns"><a class="btn" href="https://regroupement.incendiegaspe.com/fr-ca/" rel="noopener">Portail des membres</a><a class="btn alt" href="#contact">Nous joindre</a></div></div>
-<div class="carte"><h3>Vos communications</h3><p>Conformément à la Loi 25, le Regroupement applique sa <a href="{hub}RPGG%20-%20Politique%20de%20confidentialit%C3%A9%20et%20de%20protection%20des%20renseignements%20personnels%20(signe).pdf">Politique de confidentialité et de protection des renseignements personnels</a>, qui encadre aussi ses communications avec les membres.</p>
+<p>Nouvelles, avis de convocation, documents, calendrier, gouvernance et ressources de l’employeur sont regroupés dans le portail des membres.</p>
+<div class="btns"><a class="btn" href="{{r}}regroupement/portail/">Portail des membres</a><a class="btn alt" href="#contact">Nous joindre</a></div></div>
+<div class="carte"><h3>Vos communications</h3><p>Conformément à la Loi 25, le Regroupement applique sa <a href="{pol}" rel="noopener">Politique de confidentialité et de protection des renseignements personnels</a>, qui encadre aussi ses communications avec les membres.</p>
 <p>Vérifiez votre dossier de courrier indésirable. Pour changer d’adresse courriel ou vous désabonner, écrivez-nous.</p></div>
 </div></section>
-<section class="gris"><div class="wrap deux">
-<div><h2>Documents du Regroupement</h2>{dl(docs_rpgg)}</div>
-<div><h2>Documents de l’employeur</h2>{dl(docs_emp)}</div>
-</div></section>
+<section class="gris"><div class="wrap">
+<h2>Accès rapide</h2>
+<div class="grille">
+<a class="carte" href="{{r}}regroupement/portail/#nouvelles"><p class="kicker">Nouvelles</p><h3>Avis et communiqués</h3><p>Convocations aux assemblées et communications aux membres.</p><span class="lien">Voir →</span></a>
+<a class="carte" href="{{r}}regroupement/portail/#documents"><p class="kicker">Documents</p><h3>Règlements et entente de travail</h3><p>Règlements n<sup>os</sup> 1 et 2, entente 2023-2029, échelles salariales.</p><span class="lien">Consulter →</span></a>
+<a class="carte" href="{{r}}regroupement/portail/#ressources"><p class="kicker">Ressources</p><h3>Documents de l’employeur</h3><p>Assurances, descriptions de fonction, PON, organigramme.</p><span class="lien">Consulter →</span></a>
+</div></div></section>
 <section id="gouvernance"><div class="wrap">
 <h2>Gouvernance</h2><p class="note">Le mandat des membres du conseil d’administration et des personnes dirigeantes est de trois ans, ou jusqu’à l’élection de leurs successeurs.</p>
-<div class="grille" style="margin-top:14px">
-<div class="carte"><h3>Conseil d’administration</h3><ul class="sans"><li><b>Président :</b> Adam Normand</li><li><b>Secrétaire (intérim) :</b> Louis-Philippe Laurin</li><li><b>Trésorier :</b> Bruno Lévesque</li></ul><p class="note" style="margin-top:10px">En fonction depuis le 2024-11-07. Julie Samson, secrétaire, a démissionné le 2024-11-18; intérim assuré depuis le 2024-11-20.</p></div>
-<div class="carte"><h3>Conseil élargi</h3><ul class="sans"><li>Membres du conseil d’administration</li><li><b>Délégués nord :</b> Jonathan Leblanc, Julien Tissier (un poste vacant depuis le 2024-12-04)</li><li><b>Délégués sud :</b> Marco Dubé, Mitchell Legresley</li></ul></div>
-<div class="carte"><h3>Protection des renseignements personnels</h3><p>Personne responsable (Loi 25), depuis le 2024-11-05 : <b>Adam Normand</b>.</p></div>
-</div>
-<h3>Comités de négociation</h3>
-<p>Le <b>comité de négociation</b> compte au moins un membre du conseil d’administration et peut inclure des membres du conseil élargi ou d’autres membres, dans la limite prévue par le Règlement n<sup>o</sup> 1. Le <b>comité central de négociation</b> réunit le conseil élargi et le comité de négociation.</p>
+<div class="grille" style="margin-top:14px">{gouv}</div>
 </div></section>
-<section class="gris" id="contact"><div class="wrap"><h2>Nous joindre</h2>
-<dl class="coord"><dt>Adresse</dt><dd>148, boul. de Gaspé, Gaspé (Québec) G4X 1A9</dd><dt>Courriel</dt><dd><a href="mailto:regroupement@incendiegaspe.com">regroupement@incendiegaspe.com</a></dd><dt>Téléphone</dt><dd><a href="tel:+15142223064">+1 514 222-3064</a></dd></dl>
-</div></section>'''
-    page('regroupement/', 'Regroupement des pompiers volontaires du Grand Gaspé', body, desc='Regroupement des pompiers volontaires du Grand Gaspé : documents, gouvernance et contact.', current='regroupement')
+<section class="gris" id="contact"><div class="wrap"><h2>Nous joindre</h2>{contact}</div></section>"""
+    page('regroupement/', 'Regroupement des pompiers volontaires du Grand Gaspé', body, desc='Regroupement des pompiers volontaires du Grand Gaspé : portail des membres, gouvernance et contact.', current='regroupement')
+
+    # Portail des membres (remplace regroupement.incendiegaspe.com / com-rpgg)
+    nouv = ''.join(f'<details{" open" if i == 0 else ""}><summary>{g["annee"]}</summary>{liste(g["items"], True)}</details>' for i, g in enumerate(R['nouvelles']))
+    cal_items = sorted([x for g in R['calendrier'] for x in g['items']], key=lambda x: x['date'], reverse=True)
+    cal = (f'<div class="carte" style="margin-bottom:12px"><h3>À venir</h3><p>Prochaines dates à confirmer.</p></div>'
+           f'<details><summary>Récents ({len(cal_items)})</summary><ul class="sans docs">' + ''.join(f'<li><span class="meta">{x["date"]}</span> — {e(x["titre"])}</li>' for x in cal_items) + '</ul></details>')
+    gv = f'<h3>Documents de gouvernance 2026</h3>{liste(R["gouv_2026"])}'
+    for an in ('2025', '2024', '2021'):
+        gv += f'<details><summary>Documents de gouvernance {an}</summary>{liste(R["gouv_" + an])}</details>'
+    body = titre('Portail des membres', 'Regroupement des pompiers volontaires du Grand Gaspé · Restez informés, restez unis', [('Accueil', ''), ('Regroupement', 'regroupement/')]) + f"""
+<section><div class="wrap">
+<ul class="toc"><li><a href="#nouvelles">Nouvelles</a></li><li><a href="#documents">Documents</a></li><li><a href="#calendrier">Calendrier</a></li><li><a href="#gouvernance">Gouvernance</a></li><li><a href="#ressources">Ressources</a></li><li><a href="#contact">Contact</a></li></ul>
+<p class="intro" style="margin-top:14px">Bienvenue sur le portail des membres du Regroupement des pompiers volontaires du Grand Gaspé : dernières nouvelles, documents importants et calendrier des événements, en un seul endroit.</p>
+<div class="grille" style="margin-top:16px">
+<div class="carte"><h3>Loi 25</h3><p>Le Regroupement applique sa <a href="{pol}" rel="noopener">Politique de confidentialité et de protection des renseignements personnels</a>, qui régit aussi ses communications avec les membres.</p></div>
+<div class="carte"><h3>Courrier indésirable</h3><p>Vérifiez votre dossier de courrier indésirable pour vous assurer que nos communications sont reconnues comme légitimes.</p></div>
+<div class="carte"><h3>Abonnement et désabonnement</h3><p>Pour ajouter ou changer une adresse courriel, ou ne plus recevoir nos communications, <a href="#contact">écrivez-nous</a>.</p></div>
+</div></div></section>
+<section class="gris" id="nouvelles"><div class="wrap"><h2>Nouvelles et communiqués</h2>{nouv}</div></section>
+<section id="documents"><div class="wrap"><h2>Documents du Regroupement</h2>{liste(R["documents"])}</div></section>
+<section class="gris" id="calendrier"><div class="wrap"><h2>Calendrier</h2>{cal}</div></section>
+<section id="gouvernance"><div class="wrap"><h2>Gouvernance</h2>
+<p class="note">Le mandat des membres du conseil d’administration et des personnes dirigeantes est de trois ans, ou jusqu’à l’élection de leurs successeurs.</p>
+<div class="grille" style="margin:14px 0 20px">{gouv}</div>{gv}
+<h3>Comités de négociation</h3><p>Le <b>comité de négociation</b> (nommé vers le 2024-11-18) compte au moins un membre du conseil d’administration et peut inclure des membres du conseil élargi ou d’autres membres, dans la limite prévue par le Règlement n<sup>o</sup> 1. Le <b>comité central de négociation</b> réunit le conseil élargi et le comité de négociation.</p>
+</div></section>
+<section class="gris" id="ressources"><div class="wrap"><h2>Ressources</h2><p>Documents fournis par l’employeur.</p>{liste(R["ressources"])}</div></section>
+<section id="contact"><div class="wrap"><h2>Contactez-nous</h2>{contact}</div></section>"""
+    page('regroupement/portail/', 'Portail des membres — Regroupement des pompiers volontaires du Grand Gaspé', body,
+         desc='Portail des membres du Regroupement des pompiers volontaires du Grand Gaspé : nouvelles, documents, calendrier, gouvernance et ressources.', current='regroupement')
 
     # ---------------- Coordonnées ----------------
     rows = ''.join(f'<tr><td><a href="{{r}}service/caserne-{c["n"]}/">{c["n"]} — {c["nom"]}</a></td><td>{c["chef"]}</td><td>{c["adr"]}</td><td><a href="mailto:caserne{c["n"]}@incendiegaspe.com">caserne{c["n"]}@incendiegaspe.com</a><br>{c["tel"]}</td></tr>' for c in CASERNES)
@@ -583,41 +590,121 @@ def build_gaspe():
     page('404.html', 'Page introuvable — Réseau incendie', body, site='reseau', nav=NAV_RESEAU, root='/')
 
 
+MRC_DOCS = [
+    ('Questionnaire d’autovérification — Opération prévention', 'https://forms.cloud.microsoft/r/GtvzeGA9HP'),
+    ('Règlement relatif à la prévention des incendies (MRC, 2010)', 'https://www.cotedegaspe.ca/_files/ugd/ce8377_5148214dfb7f473c84a6c5a44c567b2b.pdf'),
+    ('Schéma de couverture de risques en sécurité incendie (2016)', 'https://www.cotedegaspe.ca/_files/ugd/ce8377_0ebbe10ad111435681cf8dac1d79a351.pdf'),
+    ('Cartographie du schéma de couverture de risques', 'https://www.cotedegaspe.ca/_files/ugd/ce8377_40de60775be84f069c73c5c22a4a5a6c.pdf'),
+    ('Page Sécurité incendie de la MRC', 'https://www.cotedegaspe.ca/securite-incendie'),
+]
+
+
+def operation_prevention():
+    docs = ''.join(f'<li><a href="{u}" rel="noopener">{t}</a></li>' for t, u in MRC_DOCS)
+    return f"""<div class="carte"><p class="kicker">MRC de La Côte-de-Gaspé · depuis 2026</p><h3>Opération prévention</h3>
+<p>De mai à novembre, des pompiers des services municipaux visitent les résidences et les immeubles à logements de tout le territoire pour vérifier les avertisseurs de fumée, les détecteurs de monoxyde de carbone et les extincteurs portatifs, et répondre à vos questions. Les équipes se déplacent en véhicule d’urgence et sont facilement identifiables.</p>
+<p>Vous étiez absent lors de la visite ou avez trouvé un accroche-porte? Remplissez le questionnaire d’autovérification en ligne.</p>
+<div class="btns" style="margin-bottom:12px"><a class="btn" href="{MRC_DOCS[0][1]}" rel="noopener">Questionnaire d’autovérification</a></div>
+<ul class="sans docs">{docs}</ul></div>"""
+
+
+CONSEILS_MRC = """<div class="grille">
+<div class="carte"><h3>Avertisseurs de fumée</h3><ul class="liste"><li>Un avertisseur fonctionnel par étage, dont un près des chambres.</li><li>Changez la pile aux changements d’heure; évitez les piles rechargeables.</li><li>Testez-le chaque mois et ne le peignez jamais.</li><li>Remplacez l’appareil tous les 10 ans; vérifiez le sceau CSA ou ULC.</li></ul></div>
+<div class="carte"><h3>Monoxyde de carbone</h3><ul class="liste"><li>Un détecteur par étage si vous avez un appareil de chauffage à combustion ou un garage attenant.</li><li>Ne faites jamais tourner un véhicule ou une génératrice dans le garage.</li><li>N’utilisez jamais de barbecue à l’intérieur.</li></ul></div>
+<div class="carte"><h3>Chauffage au bois</h3><ul class="liste"><li>Faites ramoner la cheminée chaque année; brûlez du bois sec.</li><li>Gardez les combustibles à au moins 1,25 m de l’appareil.</li><li>Ne surchargez pas le poêle.</li><li>Jetez les cendres dans un contenant métallique fermé, à l’extérieur.</li></ul></div>
+</div>
+<p class="note" style="margin-top:12px">Source : MRC de La Côte-de-Gaspé, section Sécurité incendie.</p>"""
+
+
 MUNIS = [
-    dict(k='cloridorme', nom='Cloridorme', type='Municipalité de Cloridorme', site=''),
-    dict(k='grande-vallee', nom='Grande-Vallée', type='Municipalité de Grande-Vallée', site=''),
-    dict(k='murdochville', nom='Murdochville', type='Ville de Murdochville', site='https://murdochville.com/'),
+    dict(k='cloridorme', nom='Cloridorme', type='Municipalité du canton de Cloridorme', site='https://municipalitecloridorme.ca/',
+         page_ssi='https://municipalitecloridorme.ca/administration-municipale/securite-incendie/',
+         alertes='https://municipalitecloridorme.ca/alertes-municipales/',
+         adresse='472, route 132, Cloridorme (Québec) G0E 1G0', tel='418 395-2808, poste 1', tel_href='+14183952808,1',
+         courriel='dg@municipalitecloridorme.ca', heures='Lundi au jeudi, 8 h à 16 h · Vendredi : fermé',
+         service='Le service de sécurité incendie de Cloridorme est formé de pompiers volontaires qui suivent une formation continue.',
+         equipe=[('Chef pompier', 'Samuel Gagné'), ('Conseiller responsable de la sécurité incendie', 'Dany Minville')],
+         equipement=[],
+         territoire='Plus de 16 km de côte, avec les secteurs de Pointe-à-la-Frégate, Petite-Anse, Cloridorme-Ouest et Saint-Yvon.',
+         recrut='Vous êtes en bonne santé et aimez le travail d’équipe? Joignez-vous aux pompiers volontaires : communiquez avec le chef pompier par l’entremise de l’hôtel de ville.'),
+    dict(k='grande-vallee', nom='Grande-Vallée', type='Municipalité de Grande-Vallée', site='https://grandevallee.ca/',
+         page_ssi='https://grandevallee.ca/administration-municipale/securite-incendie-et-securite-publique/',
+         alertes='https://grandevallee.ca/services-aux-citoyens/alertes-municipales/',
+         adresse='3, rue Saint-François-Xavier Est, Grande-Vallée (Québec) G0E 1K0', tel='418 393-2161', tel_href='+14183932161',
+         courriel='municipalite@grande-vallee.ca', heures='Lundi, mardi et jeudi, 8 h à 11 h 30 · Mercredi, 8 h à 11 h 30 et 12 h 30 à 16 h · Vendredi : fermé',
+         service='Les pompiers volontaires de Grande-Vallée assurent la protection incendie de la municipalité et maintiennent leurs compétences par une formation continue.',
+         equipe=[('Chef pompier', 'Dominic Lamy')],
+         equipement=['Caserne construite en 1996', 'Autopompe (2000)', 'Camion-citerne et unité d’urgence (2012)', 'Inventaire d’équipements renouvelé régulièrement'],
+         territoire='Village entre mer et montagnes, centre de services du secteur (CLSC, écoles, poste de la Sûreté du Québec).',
+         recrut='Protéger les personnes et les biens, servir votre communauté et acquérir une formation spécialisée : communiquez avec le chef pompier par l’entremise de l’hôtel de ville.'),
+    dict(k='murdochville', nom='Murdochville', type='Ville de Murdochville', site='https://murdochville.com/',
+         page_ssi='https://murdochville.com/services/services-aux-citoyens/services-securite/', alertes='',
+         adresse='635, 5e Rue, Murdochville (Québec) G0E 1W0', tel='418 784-2536', tel_href='+14187842536',
+         courriel='ville@murdochville.com', heures='', telec='418 784-2607',
+         ssi_contact=('securite.incendie@murdochville.com', '418 784-2536, poste 7', '+14187842536,7'),
+         service='Le Service de sécurité incendie de Murdochville (caserne 51) regroupe la sécurité incendie et la sécurité civile. Il vise à réduire les risques et à limiter les pertes de vie et de biens, selon le schéma de couverture de risques de la MRC et la réglementation québécoise, en collaboration avec les municipalités voisines.',
+         equipe=[('Directeur par intérim', 'André Côté'), ('Lieutenant', 'Jean-Pierre Chouinard')],
+         equipement=[],
+         territoire='Seule municipalité de la MRC située à l’intérieur des terres, fondée en 1953 autour de l’exploitation du cuivre.',
+         pr='Murdochville compte aussi un service de premiers répondants, qui prodigue les premiers soins en attendant l’ambulance, y compris lors d’incidents en forêt.',
+         recrut='Pour vous joindre au service, écrivez à securite.incendie@murdochville.com.'),
 ]
 
 
 def build_munis():
     for m in MUNIS:
         k = m['k']
-        nav = [('accueil', 'Accueil', f'{k}/'), ('urgence', 'Urgence', f'{k}/#urgence'), ('prevention', 'Prévention', f'{k}/#prevention'), ('brulage', 'Brûlage', f'{k}/#brulage')]
-        lien = f'<a class="btn alt" href="{m["site"]}" rel="noopener">Site de la {m["type"].split(" de ")[0].lower()}</a>' if m['site'] else ''
-        body = f'''
-<div class="titre-page"><div class="wrap"><p class="kicker" style="color:#ffb4ac">{m["type"]}</p><h1>Sécurité incendie — {m["nom"]}</h1><p>Urgence, prévention et brûlage pour les citoyens de {m["nom"]}.</p></div></div>
+        nav = [('accueil', 'Accueil', f'{k}/'), ('service', 'Service incendie', f'{k}/#service'), ('prevention', 'Prévention', f'{k}/#prevention'),
+               ('brulage', 'Brûlage', f'{k}/#brulage'), ('contact', 'Nous joindre', f'{k}/#contact')]
+        equipe = ''.join(f'<dt>{r_}</dt><dd>{n_}</dd>' for r_, n_ in m['equipe'])
+        ssi_c = ''
+        if m.get('ssi_contact'):
+            c, t, h = m['ssi_contact']
+            ssi_c = f'<dt>Courriel</dt><dd><a href="mailto:{c}">{c}</a></dd><dt>Téléphone</dt><dd><a href="tel:{h}">{t}</a></dd>'
+        equip = ('<h3>Équipements</h3><ul class="liste">' + ''.join(f'<li>{x}</li>' for x in m['equipement']) + '</ul>') if m['equipement'] else ''
+        pr = f'<p class="note">{m["pr"]}</p>' if m.get('pr') else ''
+        liens = [('Page sécurité incendie de la municipalité', m['page_ssi'])]
+        if m['alertes']:
+            liens.append(('Alertes municipales', m['alertes']))
+        liens.append((f'Site de la {m["type"].split(" de ")[0].split(" du ")[0].lower()}', m['site']))
+        liens_html = ''.join(f'<li><a href="{u}" rel="noopener">{t}</a></li>' for t, u in liens)
+        contact = f'<dt>Adresse</dt><dd>{m["adresse"]}</dd><dt>Téléphone</dt><dd><a href="tel:{m["tel_href"]}">{m["tel"]}</a></dd>'
+        if m.get('telec'):
+            contact += f'<dt>Télécopieur</dt><dd>{m["telec"]}</dd>'
+        contact += f'<dt>Courriel</dt><dd><a href="mailto:{m["courriel"]}">{m["courriel"]}</a></dd>'
+        if m['heures']:
+            contact += f'<dt>Heures</dt><dd>{m["heures"]}</dd>'
+        body = f"""
+<div class="titre-page"><div class="wrap"><p class="kicker" style="color:#ffb4ac">{m["type"]}</p><h1>Sécurité incendie — {m["nom"]}</h1><p>Urgence, service incendie, prévention et brûlage pour les citoyens de {m["nom"]}.</p></div></div>
 <section id="urgence"><div class="wrap deux">
 <div><h2>En cas d’urgence</h2><div class="alerte"><b>Incendie, accident, personne en danger : composez le 9-1-1.</b></div>
 <p>Le centre 9-1-1 répartit l’appel vers le service de sécurité incendie qui dessert {m["nom"]}. Donnez l’adresse exacte et restez en ligne jusqu’à ce que le répartiteur vous indique de raccrocher.</p></div>
-<div class="carte"><h3>Service de sécurité incendie de {m["nom"]}</h3><p>Pour toute question non urgente sur le service incendie, communiquez avec la {m["type"].replace("Municipalité", "municipalité").replace("Ville", "ville")}.</p><div class="btns">{lien}</div></div>
+<div class="carte"><h3>Autres numéros utiles</h3><dl class="coord"><dt>Urgence</dt><dd><a href="tel:911">9-1-1</a></dd><dt>Sûreté du Québec</dt><dd>418 393-2020 (lundi au vendredi, 8 h 30 à 16 h 30)</dd><dt>Info-Santé</dt><dd><a href="tel:811">8-1-1</a> (questions médicales non urgentes)</dd><dt>Hôtel de ville</dt><dd><a href="tel:{m["tel_href"]}">{m["tel"]}</a></dd></dl></div>
 </div></section>
-<section class="gris" id="prevention"><div class="wrap deux">
-<div><h2>Prévention</h2><p class="intro">La prévention des incendies relève désormais de la MRC de La Côte-de-Gaspé pour l’ensemble des municipalités de son territoire, dont {m["nom"]}.</p>
-<p>Visites de prévention, inspections, avertisseurs de fumée, ramonage, questions de réglementation : adressez-vous au responsable de la prévention de la MRC.</p>
-<p><a href="{{r}}gaspe/prevention/#conseils">Conseils pratiques pour la prévention des incendies →</a></p></div>
-{mrc_bloc()}
+<section class="gris" id="service"><div class="wrap deux">
+<div><h2>Service de sécurité incendie</h2><p class="intro">{m["service"]}</p><p>{m["territoire"]}</p>{equip}{pr}</div>
+<div class="carte"><h3>Équipe et contact</h3><dl class="coord">{equipe}{ssi_c}</dl>
+<h3>Devenir pompier volontaire</h3><p>{m["recrut"]}</p></div>
 </div></section>
-<section id="brulage"><div class="wrap">
+<section id="prevention"><div class="wrap">
+<h2>Prévention</h2><p class="intro">La prévention des incendies est coordonnée par la MRC de La Côte-de-Gaspé pour l’ensemble de ses municipalités, dont {m["nom"]}.</p>
+<div class="deux" style="margin-top:16px">{operation_prevention()}{mrc_bloc()}</div>
+<h3 style="margin-top:28px">Conseils essentiels</h3>{CONSEILS_MRC}
+</div></section>
+<section class="gris" id="brulage"><div class="wrap">
 <h2>Feux à ciel ouvert et brûlage</h2>
-<p>Avant tout brûlage, vérifiez les restrictions provinciales de la SOPFEU et la réglementation municipale de {m["nom"]}. Les restrictions provinciales ont préséance sur tout permis municipal.</p>
+<p>Avant tout brûlage, vérifiez les restrictions provinciales de la SOPFEU et la réglementation de {m["nom"]}; renseignez-vous auprès de l’hôtel de ville. Les restrictions provinciales ont préséance sur tout permis municipal.</p>
 <div class="btns"><a class="btn" href="https://sopfeu.qc.ca/restrictions/" rel="noopener">Restrictions SOPFEU</a><a class="btn alt" href="https://cartes.sopfeu.qc.ca/?lang=fr#dangers" rel="noopener">Carte des dangers d’incendie</a></div>
+</div></section>
+<section id="contact"><div class="wrap deux">
+<div><h2>Nous joindre</h2><p class="kicker">Hôtel de ville</p><dl class="coord">{contact}</dl></div>
+<div class="carte"><h3>Liens utiles</h3><ul class="sans docs">{liens_html}</ul></div>
 </div></section>
 <section class="gris"><div class="wrap"><h2>Réseau incendie de La Côte-de-Gaspé</h2><div class="grille">
 {''.join(f'<a class="carte" href="{{r}}{p}"><h3>{n}</h3><span class="lien">{d} →</span></a>' for kk, n, p, d in RESEAU if kk != k)}
-</div></div></section>'''
+</div></div></section>"""
         page(f'{k}/', f'Sécurité incendie — {m["nom"]}', body, site=k, nav=nav, current='accueil', municipalite=m['nom'],
-             desc=f'Sécurité incendie à {m["nom"]} : urgence 9-1-1, prévention (MRC de La Côte-de-Gaspé) et brûlage.')
+             desc=f'Sécurité incendie à {m["nom"]} : urgence 9-1-1, service incendie, prévention (MRC de La Côte-de-Gaspé) et brûlage.')
 
 
 def build_reseau():
@@ -646,7 +733,7 @@ def build_reseau():
 <p>Visites de prévention, inspections, avertisseurs de fumée, ramonage et questions de réglementation : communiquez avec le coordonnateur en sécurité incendie de la MRC.</p>
 <p><a href="{{r}}gaspe/prevention/#conseils">Conseils pratiques pour la prévention des incendies →</a></p></div>
 {mrc_bloc()}
-</div></section>
+</div><div class="wrap" style="margin-top:20px">{operation_prevention()}</div></section>
 <section><div class="wrap grille">
 <div class="carte"><p class="kicker">Feux à ciel ouvert</p><h3>Avant de brûler</h3><p>Vérifiez les restrictions de la SOPFEU et la réglementation de votre municipalité. Les restrictions provinciales ont préséance sur tout permis municipal.</p><div class="btns"><a class="btn" href="https://sopfeu.qc.ca/restrictions/" rel="noopener">Restrictions SOPFEU</a></div></div>
 <div class="carte"><p class="kicker">Urgence</p><h3>Composez le 9-1-1</h3><p>Incendie, accident, personne en danger : le centre 9-1-1 répartit l’appel vers le service de sécurité incendie qui dessert votre secteur.</p></div>

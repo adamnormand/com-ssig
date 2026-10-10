@@ -12,7 +12,8 @@ Primary domain: **incendiecotedegaspe.com** (`CNAME`). The four municipal domain
 | `gaspe/` | Gaspé home (SSI Gaspé) |
 | `gaspe/service/`, `gaspe/service/caserne-45/` … `caserne-52/`, `gaspe/service/recrutement/` | Service incendie, 7 casernes, recruitment |
 | `gaspe/association/` | Association des pompiers volontaires (social side) |
-| `gaspe/regroupement/` | Regroupement des pompiers volontaires du Grand Gaspé (union side) |
+| `gaspe/regroupement/` | Regroupement des pompiers volontaires du Grand Gaspé (union side): overview, governance, contact |
+| `gaspe/regroupement/portail/` | Members' portal — replaces regroupement.incendiegaspe.com (repo `com-rpgg`). Data in `tools/rpgg_data.json` |
 | `gaspe/outils/` | Burning permits + Règlement 627-96, restrictions, forest-fire and flood risk |
 | `gaspe/prevention/` | Prevention (MRC) + prevention tips article |
 | `gaspe/coordonnees/` | All contacts |
@@ -50,6 +51,8 @@ The **network bar** on every page switches between the four municipalities; "Ré
 
 **incendiegaspe.com keeps its email and portal:** do not touch its MX/TXT (SPF, DKIM, DMARC) records — all `@incendiegaspe.com` addresses on the site stay valid — nor the `regroupement` CNAME (HubSpot member portal). Forwarding should only replace the web (@ and www) records. Test `https://` on every forwarded domain afterwards.
 
+**regroupement.incendiegaspe.com** (old members' portal, `com-rpgg`): forward to `https://incendiecotedegaspe.com/gaspe/regroupement/portail/` (no path), then archive the `com-rpgg` repo and remove its GitHub Pages custom domain.
+
 If Squarespace cannot keep the path for incendiegaspe.com, update the five PDF links in the HubSpot portal to `https://incendiecotedegaspe.com/gaspe/wp-content/uploads/…`.
 
 ## Corrections made vs. the WordPress site
@@ -65,15 +68,18 @@ If Squarespace cannot keep the path for incendiegaspe.com, update the five PDF l
 
 ## To confirm (open items)
 
-1. ~~MRC prevention contact~~ — done 2026-10-10: Guillaume Pelchat, Coordonnateur en sécurité incendie, guillaume.pelchat@cotedegaspe.ca, 418 368-7000 poste 230 (cell number deliberately not published).
-2. **Direction du Service** — sources conflict: Marc Grenier (Coordonnées), Éric Fugère (Recrutement/"par intérim"), Carl Sinnett (Organigramme août 2024, intérimaire). The site names no director; contact is `ssi@ville.gaspe.qc.ca`.
-3. **Chiefs** — C45: Serge Minville (caserne page) vs Éric Fugère (Coordonnées); C48: Mitchell Legresley (site) vs Carl Sinnett (organigramme). Site uses the caserne pages.
-4. **Business hours** — 9 h–16 h 30 (header) vs 9 h–16 h (footer). Site uses 16 h 30.
-5. **Regroupement documents not online** — Règlement n° 2 (link pointed to n° 1), Entente 2023–2029 (pointed to 2016–2022 PDF), Salaires 2025 (pointed to 2024 PDF). Listed as "Document à venir". Upload them and add links.
-6. **Burning permits** — still issued by SSI Gaspé (Règl. 627-96), or moved to the MRC with prevention?
-7. **Municipal pages** — add each fire service's chief, station address and phone, and official municipality sites for Cloridorme and Grande-Vallée (only murdochville.com was confirmed).
-8. **Petite-Vallée** is also in the MRC de La Côte-de-Gaspé but not in the network bar — add or leave out?
-9. **Association** — presidents list ends at François Charbonneau while the board lists Bruno Lévesque as president; "Ami des pompiers" photos for Légion 59 and Bernard Clements were the **same file** on the old site (kept on Légion only); In memoriam "Gérard" caption was truncated on the old site; spelling Marie-Michèle vs Marie-Michelle Quirion; awards tables end at 2019.
-10. **Louis-Philippe Laurin** was shown with eric.paquette@ email — not republished.
-11. **Public union documents** — salary scale, work agreement and insurance brochures remain public, as before. Confirm that's intended.
-12. Social links kept: Facebook, Instagram (Twitter/YouTube/RSS dropped).
+1. ~~MRC prevention contact~~ — done: Guillaume Pelchat, Coordonnateur en sécurité incendie, guillaume.pelchat@cotedegaspe.ca, 418 368-7000 poste 230 (cell not published).
+2. **Direction du Service (Gaspé)** — Marc Grenier (Coordonnées) vs Éric Fugère (Recrutement) vs Carl Sinnett (Organigramme 2024-08). Site names no director.
+3. **Gaspé chiefs** — C45: Serge Minville vs Éric Fugère; C48: Mitchell Legresley vs Carl Sinnett.
+4. **Gaspé hours** — 16 h 30 used (old site also showed 16 h).
+5. ~~Regroupement documents~~ — Règlement n° 2, Entente 2023–2029 and Salaires 2025 now linked (Google Drive, from com-rpgg).
+6. **8 Regroupement documents lost with HubSpot** (listed without link on the portal): 2026-01-25 Assurances vie; PV CMEX 2024-11-17; PV CMEL 2024-11-19 and 2024-11-24; 2024-09-27 modification (Journée de la vérité et de la réconciliation); AXA Assurances vie 100K$; Guide d'entretien de l'habit de combat; Formulaire d'accusé de réception. Upload to Drive and add the URLs in `tools/rpgg_data.json`.
+7. **AGA 2026 date** — portal calendar said 2026-03-02, the 2026-03-09 notice says 2026-03-23. Calendar now shows only past events + "dates à confirmer".
+8. **Burning permits** — Gaspé still per Règl. 627-96 (SSI Gaspé); none of the three municipal sites publish a permit process, so their pages send citizens to the town hall + SOPFEU.
+9. **Cloridorme** — chief Samuel Gagné has two phone numbers on the municipal site (418 360-7948 and 418 355-9911); not published, contact via town hall.
+10. **Murdochville** — director: André Côté (directeur par intérim, Nous joindre page) vs René Robinson (Services sécurité page, with Côté as captain). Site uses André Côté. Firefighter roster on the town site not republished.
+11. **Petite-Vallée** is in the MRC but not in the network.
+12. **Association** — presidents list vs current board; duplicate Légion/Clements photo; truncated "Gérard" caption; Marie-Michèle vs Marie-Michelle; awards end 2019.
+13. **Public union documents** — salary scales, work agreements and insurance brochures remain public, as on the old portal.
+
+Sources for municipal content (2026-10-10): cotedegaspe.ca/securite-incendie and /post/operation-prevention; municipalitecloridorme.ca (sécurité incendie, urgences); grandevallee.ca (sécurité incendie, urgences); murdochville.com (services sécurité, nous joindre).
