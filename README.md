@@ -69,7 +69,7 @@ Alternative if each must show its own domain in the address bar: three tiny repo
 
 ## To confirm (open items)
 
-1. **MRC prevention contact** — Guillaume Pelchat's exact title, email and phone (set `MRC_PREV` in `tools/build.py`). He is also listed as a pompier at Caserne 46.
+1. ~~MRC prevention contact~~ — done 2026-10-10: Guillaume Pelchat, Coordonnateur en sécurité incendie, guillaume.pelchat@cotedegaspe.ca, 418 368-7000 poste 230 (cell number deliberately not published).
 2. **Direction du Service** — sources conflict: Marc Grenier (Coordonnées), Éric Fugère (Recrutement/"par intérim"), Carl Sinnett (Organigramme août 2024, intérimaire). The site names no director; contact is `ssi@ville.gaspe.qc.ca`.
 3. **Chiefs** — C45: Serge Minville (caserne page) vs Éric Fugère (Coordonnées); C48: Mitchell Legresley (site) vs Carl Sinnett (organigramme). Site uses the caserne pages.
 4. **Business hours** — 9 h–16 h 30 (header) vs 9 h–16 h (footer). Site uses 16 h 30.

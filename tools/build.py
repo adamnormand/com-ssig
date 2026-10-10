@@ -9,10 +9,12 @@ MAJ = '2026-10-10'
 # ---- Réglages à compléter (voir README, section « À confirmer ») ----
 MRC_PREV = {
     'nom': 'Guillaume Pelchat',
-    'titre': 'Prévention incendie',          # titre exact à confirmer
+    'titre': 'Coordonnateur en sécurité incendie',
     'org': 'MRC de La Côte-de-Gaspé',
-    'courriel': '',                          # à compléter
-    'tel': '',                               # à compléter
+    'courriel': 'guillaume.pelchat@cotedegaspe.ca',
+    'tel': '418 368-7000, poste 230', 'tel_href': '+14183687000,230',
+    'adresse': '298-A, boulevard York Sud, Gaspé (Québec) G4X 2L6',
+    'site': 'https://www.cotedegaspe.ca',
 }
 
 SSI = {
@@ -108,11 +110,15 @@ def titre(h1, sous='', fil=None):
 
 def mrc_bloc(court=False):
     c = MRC_PREV
-    lignes = [f'<dt>Responsable</dt><dd>{c["nom"]}</dd>', f'<dt>Organisme</dt><dd>{c["org"]}, {c["titre"].lower()}</dd>']
+    lignes = [f'<dt>Responsable</dt><dd>{c["nom"]}, {c["titre"].lower()}</dd>', f'<dt>Organisme</dt><dd>{c["org"]}</dd>']
+    if c.get('adresse'):
+        lignes.append(f'<dt>Adresse</dt><dd>{c["adresse"]}</dd>')
     if c['courriel']:
         lignes.append(f'<dt>Courriel</dt><dd><a href="mailto:{c["courriel"]}">{c["courriel"]}</a></dd>')
     if c['tel']:
-        lignes.append(f'<dt>Téléphone</dt><dd>{c["tel"]}</dd>')
+        lignes.append(f'<dt>Téléphone</dt><dd><a href="tel:{c["tel_href"]}">{c["tel"]}</a></dd>')
+    if c.get('site'):
+        lignes.append(f'<dt>Site web</dt><dd><a href="{c["site"]}" rel="noopener">cotedegaspe.ca</a></dd>')
     txt = ('La prévention des incendies relève désormais de la MRC de La Côte-de-Gaspé pour l’ensemble des municipalités '
            'du territoire : inspections, visites de prévention, sensibilisation et questions sur la réglementation en prévention.')
     return f'<div class="carte"><p class="kicker">Prévention incendie</p><h3>{c["org"]}</h3><p>{txt}</p><dl class="coord">{"".join(lignes)}</dl></div>'
