@@ -22,6 +22,7 @@ Primary domain: **incendiecotedegaspe.com** (`CNAME`). The four municipal domain
 | `gaspe/wp-content/uploads/*.pdf` | The 5 PDFs, at their old path relative to the Gaspé section |
 | `assets/`, `404.html`, `robots.txt`, `sitemap.xml`, favicons, `.nojekyll` | Shared plumbing |
 | `tools/build.py` | Generator for all HTML pages. Edit content here, run `python3 tools/build.py`, commit. |
+| `tools/optimize_images.py` | One-off image optimiser (max 1000 px, JPEG q72, logos quantised). Run once on new originals only; it re-encodes on every pass. |
 
 The **network bar** on every page switches between the four municipalities; "Réseau incendie" returns to the landing page. All links are relative.
 
