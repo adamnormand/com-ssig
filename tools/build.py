@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """Génère le site statique com-ssig (incendiecotedegaspe.com : accueil du réseau, Gaspé et pages municipales).
 Usage : python3 tools/build.py   (régénère les pages HTML à la racine du dépôt)"""
-import os, html
+import os, re, html
+from PIL import Image
 
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 MAJ = '2026-10-10'
@@ -44,6 +45,30 @@ NAV_GASPE = [('accueil', 'Accueil', ''), ('service', 'Service incendie', 'servic
 e = html.escape
 
 
+_DIM_CACHE = {}
+
+
+def _dims(m):
+    """Ajoute width/height (taille réelle) et decoding="async" aux images qui n’en ont pas."""
+    tag = m.group(0)
+    src = re.search(r'src="([^"]+)"', tag)
+    if not src or 'assets/img/' not in src.group(1):
+        return tag
+    name = src.group(1).split('assets/img/')[-1]
+    if 'width=' not in tag:
+        if name not in _DIM_CACHE:
+            try:
+                _DIM_CACHE[name] = Image.open(os.path.join(OUT, 'assets', 'img', name)).size
+            except OSError:
+                _DIM_CACHE[name] = None
+        if _DIM_CACHE[name]:
+            w, h = _DIM_CACHE[name]
+            tag = tag[:-1] + f' width="{w}" height="{h}">'
+    if 'decoding=' not in tag:
+        tag = tag[:-1] + ' decoding="async">'
+    return tag
+
+
 def page(path, title, body, *, desc='', site='gaspe', nav=None, current=None, municipalite=None, root=None):
     if site == 'gaspe' and not path.endswith('.html'):
         path = 'gaspe/' + path
@@ -54,7 +79,7 @@ def page(path, title, body, *, desc='', site='gaspe', nav=None, current=None, mu
         f'<li><a href="{r}{p}" title="{dom}"{" aria-current=\"page\"" if k == site else ""}>{n}</a></li>'
         for k, n, p, dom in RESEAU)
     if site == 'gaspe':
-        brand = (f'<a class="marque" href="{g}"><img src="{r}assets/img/ssig-logo.png" alt="Service de sécurité incendie — Ville de Gaspé" width="800" height="326"></a>')
+        brand = (f'<a class="marque" href="{g}"><img src="{r}assets/img/ssig-logo.png" alt="Service de sécurité incendie — Ville de Gaspé" width="400" height="163"></a>')
         items = nav or NAV_GASPE
     elif site == 'reseau':
         brand = (f'<a class="marque" href="{r}"><span class="txt"><small>Réseau incendie</small>La Côte-de-Gaspé</span></a>')
@@ -104,7 +129,7 @@ def page(path, title, body, *, desc='', site='gaspe', nav=None, current=None, mu
 </head>
 <body>
 <a class="sr" href="#contenu">Aller au contenu</a>
-<div class="reseau"><div class="wrap"><a class="lbl" href="{r}"{' aria-current="page"' if site == 'reseau' else ''}>Réseau incendie</a><ul>{reseau}</ul><span class="urg">Urgence : <b>9-1-1</b></span></div></div>
+<div class="reseau"><div class="wrap"><a class="lbl" href="{r}"{' aria-current="page"' if site == 'reseau' else ''}><span class="lbl-t">Réseau incendie</span></a><ul>{reseau}</ul><span class="urg">Urgence : <b>9-1-1</b></span></div></div>
 <header class="entete"><div class="wrap">{brand}
 <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav" onclick="var n=document.getElementById('nav');var o=n.classList.toggle('ouvert');this.setAttribute('aria-expanded',o)">Menu</button>
 <nav class="princ" id="nav" aria-label="Menu principal"><ul>{navhtml}</ul></nav>
@@ -114,9 +139,11 @@ def page(path, title, body, *, desc='', site='gaspe', nav=None, current=None, mu
 </main>
 <div class="urgence-bande">EN CAS D’URGENCE, COMPOSEZ LE <a href="tel:911">9-1-1</a></div>
 <footer class="pied"><div class="wrap">{foot.replace('<div class="bas">', '</div><div class="bas"><div class="wrap">', 1)}</div></footer>
+<script>(function(){{var c=document.querySelector('.reseau ul [aria-current]');if(c){{var u=c.closest('ul');u.scrollLeft=Math.max(0,c.offsetLeft-u.offsetLeft-40)}}}})()</script>
 </body>
 </html>
 '''
+    doc = re.sub(r'<img\b[^>]*>', _dims, doc)
     fp = os.path.join(OUT, path, 'index.html') if not path.endswith('.html') else os.path.join(OUT, path)
     os.makedirs(os.path.dirname(fp), exist_ok=True)
     open(fp, 'w', encoding='utf-8').write(doc)
@@ -216,7 +243,7 @@ CASERNES = [
 def build_gaspe():
     # ---------------- Accueil ----------------
     body = f'''
-<div class="heros" style="background-image:url('{{r}}assets/img/banniere-accueil.jpg')"><div class="wrap">
+<div class="heros" style="--hero:url('{{r}}assets/img/banniere-accueil.jpg');--hero-m:url('{{r}}assets/img/banniere-accueil-m.jpg')"><div class="wrap">
 <p class="kicker">Ville de Gaspé</p>
 <h1>Service de sécurité incendie de Gaspé</h1>
 <p>Une centaine de pompiers, sauveteurs, plongeurs et membres d’équipes spécialisées, répartis dans sept casernes, au service de la population de L’Anse-à-Valleau à Fort-Prével.</p>
@@ -721,7 +748,7 @@ def build_reseau():
         f'<a class="carte" href="{{r}}{p}"><p class="kicker">{desc_m[k][0]}</p><h3>{n}</h3><p>{desc_m[k][1]}</p><span class="lien">{d} →</span></a>'
         for k, n, p, d in RESEAU)
     body = f"""
-<div class="heros" style="background-image:url('{{r}}assets/img/banniere-accueil.jpg')"><div class="wrap">
+<div class="heros" style="--hero:url('{{r}}assets/img/banniere-accueil.jpg');--hero-m:url('{{r}}assets/img/banniere-accueil-m.jpg')"><div class="wrap">
 <p class="kicker">MRC de La Côte-de-Gaspé</p>
 <h1>Réseau incendie de La Côte-de-Gaspé</h1>
 <p>Gaspé, Cloridorme, Grande-Vallée et Murdochville : trouvez l’information de sécurité incendie de votre municipalité.</p>

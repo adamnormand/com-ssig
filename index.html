@@ -16,14 +16,14 @@
 </head>
 <body>
 <a class="sr" href="#contenu">Aller au contenu</a>
-<div class="reseau"><div class="wrap"><a class="lbl" href="" aria-current="page">Réseau incendie</a><ul><li><a href="gaspe/" title="incendiegaspe.com">Gaspé</a></li><li><a href="cloridorme/" title="incendiecloridorme.com">Cloridorme</a></li><li><a href="grande-vallee/" title="incendiegrandevallee.com">Grande-Vallée</a></li><li><a href="murdochville/" title="incendiemurdochville.com">Murdochville</a></li></ul><span class="urg">Urgence : <b>9-1-1</b></span></div></div>
+<div class="reseau"><div class="wrap"><a class="lbl" href="" aria-current="page"><span class="lbl-t">Réseau incendie</span></a><ul><li><a href="gaspe/" title="incendiegaspe.com">Gaspé</a></li><li><a href="cloridorme/" title="incendiecloridorme.com">Cloridorme</a></li><li><a href="grande-vallee/" title="incendiegrandevallee.com">Grande-Vallée</a></li><li><a href="murdochville/" title="incendiemurdochville.com">Murdochville</a></li></ul><span class="urg">Urgence : <b>9-1-1</b></span></div></div>
 <header class="entete"><div class="wrap"><a class="marque" href=""><span class="txt"><small>Réseau incendie</small>La Côte-de-Gaspé</span></a>
 <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav" onclick="var n=document.getElementById('nav');var o=n.classList.toggle('ouvert');this.setAttribute('aria-expanded',o)">Menu</button>
 <nav class="princ" id="nav" aria-label="Menu principal"><ul><li><a href="" aria-current="page">Accueil</a></li><li><a href="gaspe/">Gaspé</a></li><li><a href="cloridorme/">Cloridorme</a></li><li><a href="grande-vallee/">Grande-Vallée</a></li><li><a href="murdochville/">Murdochville</a></li><li><a href="#prevention">Prévention</a></li></ul></nav>
 </div></header>
 <main id="contenu">
 
-<div class="heros" style="background-image:url('assets/img/banniere-accueil.jpg')"><div class="wrap">
+<div class="heros" style="--hero:url('assets/img/banniere-accueil.jpg');--hero-m:url('assets/img/banniere-accueil-m.jpg')"><div class="wrap">
 <p class="kicker">MRC de La Côte-de-Gaspé</p>
 <h1>Réseau incendie de La Côte-de-Gaspé</h1>
 <p>Gaspé, Cloridorme, Grande-Vallée et Murdochville : trouvez l’information de sécurité incendie de votre municipalité.</p>
@@ -55,5 +55,6 @@
 <div><h4>Municipalités</h4><ul class="sans"><li><a href="gaspe/">Gaspé</a></li><li><a href="cloridorme/">Cloridorme</a></li><li><a href="grande-vallee/">Grande-Vallée</a></li><li><a href="murdochville/">Murdochville</a></li></ul></div>
 </div>
 </div><div class="bas"><div class="wrap">incendiecotedegaspe.com · Mise à jour : 2026-10-10</div></div></footer>
+<script>(function(){var c=document.querySelector('.reseau ul [aria-current]');if(c){var u=c.closest('ul');u.scrollLeft=Math.max(0,c.offsetLeft-u.offsetLeft-40)}})()</script>
 </body>
 </html>
